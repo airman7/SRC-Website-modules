@@ -19,7 +19,7 @@ public class CheckStudent extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        //CheckStudent?name=Mayank&id=15001&branch=IT
+        //CheckStudent?id=15001
         
         Connection con =Conn.getCon();
         PrintWriter out = response.getWriter();
@@ -30,16 +30,21 @@ public class CheckStudent extends HttpServlet {
             pres = con.prepareStatement(query);
             pres.setString(1, request.getParameter("id"));
             ResultSet rs=pres.executeQuery();
-            con.close();
-            if(rs.next())
+            boolean b =rs.next();
+            if(b)
             {    
                 String name=rs.getString("Name");
                 Cookie c=new Cookie("name", name);
                 response.addCookie(c);
+                con.close();
                 response.sendRedirect("testpage.jsp");
             }
             else
-                response.sendRedirect("index.jsp");
+            {
+                con.close();
+                 response.sendRedirect("index.jsp");
+            }
+               
         } 
         catch (SQLException ex) {
             Logger.getLogger(CheckStudent.class.getName()).log(Level.SEVERE, null, ex);

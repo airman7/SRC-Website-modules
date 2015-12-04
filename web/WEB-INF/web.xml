@@ -4,9 +4,17 @@
         <servlet-name>CheckStudent</servlet-name>
         <servlet-class>CheckStudent</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Test</servlet-name>
+        <servlet-class>Test</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CheckStudent</servlet-name>
         <url-pattern>/CheckStudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Test</servlet-name>
+        <url-pattern>/Test</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
