@@ -4,7 +4,9 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -12,6 +14,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Random;
 
 public class Test extends HttpServlet 
 {
@@ -20,15 +23,14 @@ public class Test extends HttpServlet
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        String query="select * from questions where qid=?";
         Connection con=Conn.getCon();    
         
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             Cookie c[]=request.getCookies();
             int i;
-            String name="";
-            for(i=0;i<c.length;i++)
+            String name="mayank";
+            /*for(i=0;i<c.length;i++)
             {    
                 if(c[i].getName()=="name")
                 {
@@ -36,6 +38,7 @@ public class Test extends HttpServlet
                     break;
                 }
             }
+                    */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -43,17 +46,45 @@ public class Test extends HttpServlet
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Welcome " + name + "</h1>");
+            out.println("<form action=\"Result\"><center>");
+            String query="select * from testquestions where questionID=?";
+        
+             Random rand=new Random();
+            int randomNum = rand.nextInt(5) + 1;
+            System.out.println(randomNum);
+            String value="M00"+randomNum;
+            System.out.println(value);
             
             PreparedStatement ps=con.prepareStatement(query);
-            ps.setString(1, "MCQ");
+            ps.setString(1, value);
             ResultSet rs=ps.executeQuery();
+            ResultSetMetaData rdata=rs.getMetaData();
+           
+            
             char ch='a';
-            String option[]={"Mayank","Nakul","vinu","kittu"};
+            rs.absolute(1);     //damn this!!
+            String question=rs.getString("question");
+            String option[]=new String[4];
+            for(i=0;i<4;i++)
+            {
+                option[i]=rs.getString("option"+(i+1));
+            }
+            out.print("<p>Ques:"+question+"</p>");
             for(i=0;i<4;i++)
             {
                 out.print("<input type=\"radio\" name=\"Option\" value=\""+ch+"\" />"+option[i]+"<br>");
                 ch++;
             }
+            out.println("<br><input value=\"Submit\" type=\"SUBMIT\" class=\"button\"><br><br>");
+            out.println("<input value=\"Previous Question\" type=\"BUTTON\" class=\"button\">");
+            out.println("<input value=\"Next Question\" type=\"BUTTON\" class=\"button\">");
+            
+            //Result?Option=a
+            
+            String query2="update tablename set score";
+            //how to store choices for student
+            
+            out.println("</center></form>");
             out.println("</body>");
             out.println("</html>");
         } catch (SQLException ex) {

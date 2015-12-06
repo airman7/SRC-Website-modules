@@ -37,7 +37,7 @@ public class CheckStudent extends HttpServlet {
                 Cookie c=new Cookie("name", name);
                 response.addCookie(c);
                 con.close();
-                response.sendRedirect("testpage.jsp");
+                response.sendRedirect("Test");
             }
             else
             {
