@@ -26,6 +26,10 @@ public class Test extends HttpServlet
         Connection con=Conn.getCon();    
         
         try (PrintWriter out = response.getWriter()) {
+            
+            System.out.println(request.getRequestURL());
+            System.out.print(request.getParameter("called"));
+            
             /* TODO output your page here. You may use following sample code. */
             Cookie c[]=request.getCookies();
             int i;
@@ -46,10 +50,10 @@ public class Test extends HttpServlet
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Welcome " + name + "</h1>");
-            out.println("<form action=\"Result\"><center>");
+            out.println("<form action=\"Test\"><center>");
             String query="select * from testquestions where questionID=?";
         
-             Random rand=new Random();
+            Random rand=new Random();
             int randomNum = rand.nextInt(5) + 1;
             System.out.println(randomNum);
             String value="M00"+randomNum;
@@ -60,8 +64,8 @@ public class Test extends HttpServlet
             ResultSet rs=ps.executeQuery();
             ResultSetMetaData rdata=rs.getMetaData();
            
+            int marks=0;
             
-            char ch='a';
             rs.absolute(1);     //damn this!!
             String question=rs.getString("question");
             String option[]=new String[4];
@@ -72,16 +76,18 @@ public class Test extends HttpServlet
             out.print("<p>Ques:"+question+"</p>");
             for(i=0;i<4;i++)
             {
-                out.print("<input type=\"radio\" name=\"Option\" value=\""+ch+"\" />"+option[i]+"<br>");
-                ch++;
+                out.print("<input type=\"radio\" name=\"Option\" value=\""+(i+1)+"\" />"+option[i]+"<br>");
             }
             out.println("<br><input value=\"Submit\" type=\"SUBMIT\" class=\"button\"><br><br>");
             out.println("<input value=\"Previous Question\" type=\"BUTTON\" class=\"button\">");
             out.println("<input value=\"Next Question\" type=\"BUTTON\" class=\"button\">");
             
-            //Result?Option=a
-            
+            //Test?Option=a
+            /*
+            if(rs.getString("answer")==userAnswer)
+                marks+=3;
             String query2="update tablename set score";
+            */
             //how to store choices for student
             
             out.println("</center></form>");
