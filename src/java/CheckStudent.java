@@ -12,6 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class CheckStudent extends HttpServlet {
 
@@ -34,8 +35,11 @@ public class CheckStudent extends HttpServlet {
             if(b)
             {    
                 String name=rs.getString("Name");
-                Cookie c=new Cookie("name", name);
-                response.addCookie(c);
+                //Cookie c=new Cookie("name", name);
+                //response.addCookie(c);
+                HttpSession ses=request.getSession();
+                ses.setAttribute("name",name);
+                   
                 con.close();
                 response.sendRedirect("Test?called=1");
             }
