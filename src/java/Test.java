@@ -30,9 +30,13 @@ public class Test extends HttpServlet
         try (PrintWriter out = response.getWriter()) 
         {
             int i;
+            int comp[];
+            String answer,choice;
             String name="";
             name= (String) ses.getAttribute("name");
             int num;
+            int randomNum=0;
+            Random rand;
             String option[]=new String[4];
                 
             out.println("<!DOCTYPE html>");
@@ -45,13 +49,37 @@ public class Test extends HttpServlet
             out.println("<form action=\"Test\"><center>");
             String query="select * from testquestions where questionID=?";
             
+            comp=(int[]) ses.getAttribute("completed");
             
-            Random rand=new Random();
-            int randomNum = rand.nextInt(5) + 1;
-            //System.out.println(randomNum);
+            int temp=0;
+            boolean flag=true;
+            
+            if(!"1".equals(request.getParameter("called")))    
+            while(flag)
+            {
+                rand=new Random();
+                randomNum = rand.nextInt(5) + 1;
+                    
+                for(i=0;i<comp.length;i++)
+                {
+                    if(comp[i]!=randomNum)
+                    {
+                        temp++;
+                    }
+                }
+                if(temp==comp.length)
+                    flag=false;
+                else
+                    continue;
+            }
+            else
+            {
+                rand=new Random();
+                randomNum = rand.nextInt(5) + 1;
+            }
+            
             String value="M00"+randomNum;
-            //System.out.println(value);
-
+            
             PreparedStatement ps=con.prepareStatement(query);
             ps.setString(1, value);
             ResultSet rs=ps.executeQuery();
@@ -80,6 +108,11 @@ public class Test extends HttpServlet
                 int n=Integer.parseInt(res.getString(1));
                 ses.setAttribute("totalQues",n);
                 
+                //make a list of question already done in session
+                comp=new int[n];
+                comp[0]=randomNum;
+                ses.setAttribute("completed", comp);
+                
                 //Cookie c[]=request.getCookies();
                 /*for(i=0;i<c.length;i++)
                 {    
@@ -95,32 +128,36 @@ public class Test extends HttpServlet
             {
                 num=(Integer)ses.getAttribute("quesNum");
                 marks=(Integer)ses.getAttribute("marks");
-
+                //answer stored in session
+                answer=(String) ses.getAttribute("answer");
+                
+                //Test?option=1
+                //option selsected by user
+                choice=request.getParameter("option");
+                
+                if(choice.equals(answer))
+                {
+                    marks=marks+3;
+                }
+                else
+                    marks=marks-1;
+                //String query2="update tablename set score";
+                 
+                System.out.println(marks);
+            
                 if(num>(Integer)ses.getAttribute("totalQues"))
                 {
                     con.close();
                     response.sendRedirect("congrats.jsp");
                 }    
-                else
-                {
-                    //Test?Option=a
-
-                    if(rs.getString("answer").equalsIgnoreCase(request.getParameter("option")))
-                    {
-                        marks=marks+3;
-                    }
-                    else
-                        marks=marks-1;
-                    //String query2="update tablename set score";
-                    //how to store choices for student
-                }
             }
             
+            ses.setAttribute("answer",rs.getString("answer"));
+                    
             out.print("<p>Ques"+num+":"+question+"</p>");
             num++;
             ses.setAttribute("quesNum", num);
             ses.setAttribute("marks", marks);
-            
             for(i=0;i<4;i++)
             {
                 out.print("<input type=\"radio\" name=\"option\" value=\""+(i+1)+"\" />"+option[i]+"<br>");
