@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Random;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 public class Test extends HttpServlet 
 {
@@ -29,16 +30,19 @@ public class Test extends HttpServlet
             
         try (PrintWriter out = response.getWriter()) 
         {
+            //response.setIntHeader("Refresh", 1);
             int i;
             int comp[];
             String answer,choice;
             String name="";
             name= (String) ses.getAttribute("name");
             int num;
+            long time;
             int randomNum=0;
             Random rand;
             String option[]=new String[4];
-                
+            Date today = new Date();
+            
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -46,6 +50,18 @@ public class Test extends HttpServlet
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Welcome " + name + "</h1>");
+            
+            try
+            {
+                time=today.getTime()-((long) ses.getAttribute("startTime"));
+            }
+            catch(Exception e)
+            {
+                time=0;
+                ses.setAttribute("startTime", today.getTime());
+            }
+            out.println("Time:"+time/1000+"sec");
+            
             out.println("<form action=\"Test\"><center>");
             String query="select * from testquestions where questionID=?";
             
@@ -55,27 +71,25 @@ public class Test extends HttpServlet
             boolean flag=true;
             
             if(!"1".equals(request.getParameter("called")))    
-            while(flag)
             {
-                rand=new Random();
-                randomNum = rand.nextInt(5) + 1;
-                    
-                for(i=0;i<comp.length;i++)
+                while(flag)
                 {
-                    if(comp[i]!=randomNum)
-                    {
-                        temp++;
-                    }
+                    rand=new Random();
+                    randomNum = rand.nextInt(5) + 1;
+                    temp=0;
+                    for(i=0;i<comp.length;i++)
+                        if(comp[i]!=randomNum)
+                            temp++;
+                    if(temp==comp.length)
+                        flag=false;
                 }
-                if(temp==comp.length)
-                    flag=false;
-                else
-                    continue;
+                System.out.println("step one done");
             }
             else
             {
                 rand=new Random();
                 randomNum = rand.nextInt(5) + 1;
+                System.out.println("step one done");
             }
             
             String value="M00"+randomNum;
@@ -126,6 +140,18 @@ public class Test extends HttpServlet
             }
             else
             {
+                comp=(int[]) ses.getAttribute("completed");
+                int k=0;
+                for(i=0;i<comp.length;i++)
+            {
+                System.out.println("completed:"+comp[i]);
+            }
+                while(comp[k]!=0)
+                    k++;
+                comp[k]=randomNum;
+                ses.setAttribute("completed", comp);
+               
+                
                 num=(Integer)ses.getAttribute("quesNum");
                 marks=(Integer)ses.getAttribute("marks");
                 //answer stored in session
