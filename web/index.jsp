@@ -24,5 +24,6 @@
     Password    <input required name="pass" type="password"><br>
                 <input value="Submit" type="SUBMIT" class="button">
 </fieldset>        </form></pre></center>
+    <a href="componentpage.jsp">component module</a>
     </body>
 </html>
