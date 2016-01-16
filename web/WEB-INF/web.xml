@@ -12,6 +12,10 @@
         <servlet-name>Component</servlet-name>
         <servlet-class>Component</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FindComponent</servlet-name>
+        <servlet-class>FindComponent</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CheckStudent</servlet-name>
         <url-pattern>/CheckStudent</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>Component</servlet-name>
         <url-pattern>/Component</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FindComponent</servlet-name>
+        <url-pattern>/FindComponent</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
