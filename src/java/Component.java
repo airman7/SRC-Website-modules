@@ -23,11 +23,13 @@ public class Component extends HttpServlet
             con = Conn.getCon();
             
             //Component?comp=2&person=150001
-            String query1="update components set holderid=?,holder=?,available=? where componentid=?";
+            //String query1="update components set holderid=?,holder=?,available=? where componentid=?";
+            String query1="insert into componentinfo(cid,cname,holderid,holder) values(?,?,?,?)";
             String getName="select Name from members where ID=?";
             String getAvailability="select available,componentname from components where componentid=?";
+            String setAvailability="update components set available=? where componentid=?";
             ResultSet rs,rs2;
-            PreparedStatement ps,ps2,ps3;
+            PreparedStatement ps,ps2,ps3,ps4;
             String cname,name;
             int cid,avail,id;
             try {
@@ -49,11 +51,16 @@ public class Component extends HttpServlet
                 
                 name=rs.getString("Name");
                 
+                ps4=con.prepareStatement(setAvailability);
+                ps4.setInt(1, avail);
+                ps4.setInt(2, cid);
+                int j=ps4.executeUpdate();
+                
                 ps3=con.prepareStatement(query1);
-                ps3.setInt(1, id);
-                ps3.setString(2, name);
-                ps3.setInt(3, avail);
-                ps3.setInt(4, cid);
+                ps3.setInt(1, cid);
+                ps3.setString(2, cname);
+                ps3.setInt(3, id);
+                ps3.setString(4, name);
                 int i=ps3.executeUpdate();
                  
                 if(i==1)
@@ -69,6 +76,7 @@ public class Component extends HttpServlet
                     out.println("</body");
                     out.println("</html");
                 }
+                con.close();
                 
             } catch (SQLException ex) {
                 out.println("<!DOCTYPE html>");

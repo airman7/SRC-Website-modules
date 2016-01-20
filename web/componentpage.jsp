@@ -10,7 +10,7 @@
             con = Conn.getCon();
             String query1="select componentid,componentname from components where available>0 order by componentname";
             String mem="select ID,Name from members order by Name";
-            String find="select componentid,componentname,holder,holderid from components where available<quantity order by componentname";
+            String find="select cname,holder,cid,holderid from componentinfo";
             ResultSet rs;
             Statement stmt;
             int i;    
@@ -81,44 +81,62 @@ Member      <select name="person">
         </pre></form>
         <hr>
         <h4>Find a component</h4>
-        <form method="get" action="FindComponent">
-        <pre>
-Component   <select name="find">
-        <%      
-                    stmt = con.createStatement();
-                    rs=stmt.executeQuery(find);
-                    count =0;
-                    while (rs.next()) 
-                    {
-                        ++count;
-                    }  
-                    if(rs.first())
+        <form method="get" action="ReceivedComponent"><table border="1">
+            <colgroup width="200">
+            <colgroup width="200">
+        <tr>
+				<th>Component</th>
+				<th>Name</th>
+                                <th>Got back</th>
+        </tr>
+	<%      
+                stmt = con.createStatement();
+                rs=stmt.executeQuery(find);
+                count =0;
+                String component,holder;
+                int cid,hid;
+                while (rs.next()) 
+                {
+                    ++count;
+                }  
+                if(rs.first())
                 {
                     for(i=0;i<count;i++)
                     {
-
-                        String component=rs.getString("componentname");
+                        component=rs.getString("cname");
+                        holder =rs.getString("holder");
+                        cid=rs.getInt("cid");
+                        hid=rs.getInt("holderid");
         %>
-                    <option value="<%= component %>"><%=component%></option>
+                    <tr>
+				<td><%= component %></td>
+				<td><%= holder %></td>
+                                <td><input type="radio" name="rec" value="<%=cid%>,<%=hid%>"> </td>
+                    </tr>
         <%                
                         rs.next();
                     }
                 }
-                else
-                {
-        %>
-                    <option value="null">No result</option>        
-        <%
-                }
+                con.close();
             }
             catch (SQLException ex) 
             {
                 out.print("ERROR");
             }
-        %>        
-            </select>
-            
-            <button type="submit">Find</button>
-        </pre></form>  
+        %>
+        </table> 
+        <input value="Submit" type="submit" >
+        </form>
+        <hr>
+        <h4>Add a new component</h4>
+        <form method="get" action="AddComponent">
+        <pre>
+Name		<input  required type='text' name='cname' ><br>
+Price		<input  required type='number' name='price'> <br>
+Quantity        <input  required type='number' name='quant'><br>
+Company		<input type='text' name='company'> <br>
+                    <input value="Submit" type="submit" >		
+        </pre>
+        </form>
     </body>
 </html>

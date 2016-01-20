@@ -24,6 +24,7 @@
     Password    <input required name="pass" type="password"><br>
                 <input value="Submit" type="SUBMIT" class="button">
 </fieldset>        </form></pre></center>
-    <a href="componentpage.jsp">component module</a>
+    <a href="componentpage.jsp">component module</a><br>
+    <a href="validateuser.jsp">Validate a new SRCian</a>
     </body>
 </html>

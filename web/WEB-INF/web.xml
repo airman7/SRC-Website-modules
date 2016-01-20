@@ -13,8 +13,16 @@
         <servlet-class>Component</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>FindComponent</servlet-name>
-        <servlet-class>FindComponent</servlet-class>
+        <servlet-name>AddComponent</servlet-name>
+        <servlet-class>AddComponent</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReceivedComponent</servlet-name>
+        <servlet-class>ReceivedComponent</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Validate</servlet-name>
+        <servlet-class>Validate</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CheckStudent</servlet-name>
@@ -29,8 +37,16 @@
         <url-pattern>/Component</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>FindComponent</servlet-name>
-        <url-pattern>/FindComponent</url-pattern>
+        <servlet-name>AddComponent</servlet-name>
+        <url-pattern>/AddComponent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReceivedComponent</servlet-name>
+        <url-pattern>/ReceivedComponent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Validate</servlet-name>
+        <url-pattern>/Validate</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
